@@ -28,6 +28,7 @@ jobs:
         run: |
           for file in ${ALL_CHANGED_FILES}; do
             echo "$file was changed"
+            find . -name $file -exec grep -icH "Frogs are cool!" '{}' '+' | awk -F: '{ T += $2 } 1; END { print "TOTAL:" T }' >> results.txt
           done
   
   scrape-strings:
