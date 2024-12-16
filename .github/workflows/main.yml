@@ -15,15 +15,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+        # To compare changes between the current commit and the last pushed remote commit set `since_last_remote_commit: true`. e.g
         with:
-          fetch-depth: 0
-      - name: List Updates
+          since_last_remote_commit: true 
+
+      - name: List all changed files
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
-          current_commit=`git log -n 1 --pretty=format:%H`
-          echo $current_commit
-          last_deps_mod_commit=`git log -n 1 --pretty=format:%H -- composer.json`
-          echo $last_deps_mod_commit
-          if [ $current_commit == $last_deps_mod_commit ]; then echo USE_LOCK=0 > ci.conf; else echo USE_LOCK=1 > ci.conf; fi
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
+  
   scrape-strings:
     runs-on: ubuntu-latest
     defaults:
