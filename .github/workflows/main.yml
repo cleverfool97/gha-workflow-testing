@@ -34,3 +34,11 @@ jobs:
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}        
         run: ./scripts/stringscrape.sh ${ALL_CHANGED_FILES}
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        continue-on-error: true
+        with:
+          name: exports
+          path: ./exports
+          retention-days: 5
