@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  scrape-strings:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,16 +28,9 @@ jobs:
         run: |
           for file in ${ALL_CHANGED_FILES}; do
             echo "$file was changed"
-            find . -name $file -exec grep -icH "Frogs are cool!" '{}' '+' | awk -F: '{ T += $2 } 1; END { print "TOTAL:" T }' >> results.txt
           done
-  
-  scrape-strings:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./scripts
-    steps:
-      - name: Check out the repository to the runner
-        uses: actions/checkout@v4  
-      - name: Run a script
-        run: ./test.sh
+          
+      - name: Scrape strings
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}        
+        run: ./scrapestrings.sh ${ALL_CHANGED_FILES}
