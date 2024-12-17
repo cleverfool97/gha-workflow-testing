@@ -33,4 +33,4 @@ jobs:
       - name: Scrape strings
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}        
-        run: ./scrapestrings.sh ${ALL_CHANGED_FILES}
+        run: ./scripts/stringscrape.sh ${ALL_CHANGED_FILES}
